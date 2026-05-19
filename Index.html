@@ -668,4 +668,1187 @@
                     <div class="stat-card">
                         <div class="stat-info">
                             <h3 data-i18n="monthly_profit">Monthly Profit</h3>
-                            <p id="dash-monthly-profit">
+                            <p id="dash-monthly-profit">₹0.00</p>
+                        </div>
+                        <div class="stat-icon icon-green"><i class="fas fa-piggy-bank"></i></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 data-i18n="pending_amount">Pending Dues</h3>
+                            <p id="dash-pending">₹0.00</p>
+                        </div>
+                        <div class="stat-icon icon-orange"><i class="fas fa-hand-holding-usd"></i></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 data-i18n="expenses">Expenses</h3>
+                            <p id="dash-expenses">₹0.00</p>
+                        </div>
+                        <div class="stat-icon icon-red"><i class="fas fa-receipt"></i></div>
+                    </div>
+                </div>
+
+                <div class="dashboard-layout">
+                    <div class="card">
+                        <div class="card-header"><span data-i18n="sales_overview">Sales Trend</span></div>
+                        <canvas id="salesChart" height="110"></canvas>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span data-i18n="recent_transactions">Recent Activities</span></div>
+                        <div class="table-responsive">
+                            <table id="recent-transactions-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="date">Date</th>
+                                        <th data-i18n="type">Type</th>
+                                        <th data-i18n="amount">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: CUSTOMERS -->
+            <section id="view-customers" class="view-section">
+                <div class="page-header">
+                    <h2 data-i18n="nav_customers">Customer Ledger (Khata)</h2>
+                    <button class="btn btn-primary" onclick="openModal('customerModal')">
+                        <i class="fas fa-plus"></i> <span data-i18n="add_customer">Add Customer</span>
+                    </button>
+                </div>
+                <div class="card">
+                    <p style="margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted);">
+                        <i class="fas fa-info-circle"></i> <span data-i18n="ledger_info">Click on the customer's name to view their full transaction & shopping history.</span>
+                    </p>
+                    <div class="table-responsive">
+                        <table id="customers-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="name">Name</th>
+                                    <th data-i18n="phone">Phone</th>
+                                    <th data-i18n="address">Address</th>
+                                    <th data-i18n="pending">Pending Balance</th>
+                                    <th data-i18n="actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: INVENTORY -->
+            <section id="view-inventory" class="view-section">
+                <div class="page-header">
+                    <h2 data-i18n="nav_inventory">Inventory Management</h2>
+                    <button class="btn btn-primary" onclick="openModal('inventoryModal')">
+                        <i class="fas fa-plus"></i> <span data-i18n="add_product">Add Product</span>
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table id="inventory-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="product_name">Product Name</th>
+                                    <th data-i18n="qty">Quantity</th>
+                                    <th data-i18n="buy_price">Buy Price</th>
+                                    <th data-i18n="sell_price">Sell Price</th>
+                                    <th data-i18n="actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: BILLING -->
+            <section id="view-billing" class="view-section">
+                <div class="page-header">
+                    <h2 data-i18n="nav_billing">Billing & Invoicing</h2>
+                </div>
+                <div class="billing-grid">
+                    <div class="card">
+                        <div class="card-header"><span data-i18n="create_invoice">Create Invoice</span></div>
+                        <select id="bill-customer-select">
+                            <option value="">Select Customer (Optional)</option>
+                        </select>
+                        
+                        <div class="bill-row-input">
+                            <select id="bill-product-select" style="margin:0;">
+                                <option value="">Select Product</option>
+                            </select>
+                            <input type="number" id="bill-qty" placeholder="Qty" min="1" value="1" style="margin:0;">
+                            <input type="number" id="bill-price" placeholder="Price" readonly style="margin:0;">
+                            <button class="btn btn-primary" id="btn-add-bill-item" style="height:100%; justify-content:center;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <div class="bill-items-list" id="bill-items-container">
+                            <!-- Items populated here -->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><span data-i18n="bill_summary">Summary</span></div>
+                        <div class="bill-totals">
+                            <div class="row">
+                                <span data-i18n="subtotal">Subtotal:</span>
+                                <span id="bill-subtotal">₹0.00</span>
+                            </div>
+                            <div class="row" style="align-items: center;">
+                                <span data-i18n="discount">Discount (₹):</span>
+                                <input type="number" id="bill-discount" value="0" min="0" style="width: 100px; margin:0; padding:0.4rem;">
+                            </div>
+                            <div class="row" style="align-items: center;">
+                                <span data-i18n="amount_paid">Paid Amount (₹):</span>
+                                <input type="number" id="bill-paid" value="0" min="0" style="width: 100px; margin:0; padding:0.4rem;">
+                            </div>
+                            <div class="row" style="align-items: center;">
+                                <span data-i18n="payment_mode">Payment Mode:</span>
+                                <select id="bill-payment-mode" style="width: 120px; margin:0; padding:0.4rem;">
+                                    <option value="Cash" data-i18n="cash">Cash</option>
+                                    <option value="UPI" data-i18n="upi">UPI</option>
+                                    <option value="Credit" data-i18n="credit">Credit (Udhaar)</option>
+                                </select>
+                            </div>
+                            <div class="row grand-total">
+                                <span data-i18n="total">Total:</span>
+                                <span id="bill-grand-total">₹0.00</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="btn-save-bill" style="width: 100%; margin-top: 1.5rem; justify-content: center;">
+                            <i class="fas fa-print"></i> <span data-i18n="save_print">Save & Print Bill</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: REPORTS -->
+            <section id="view-reports" class="view-section">
+                <div class="page-header">
+                    <h2 data-i18n="nav_reports">Business Reports</h2>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span data-i18n="all_invoices">Invoices Generated</span></div>
+                    <div class="table-responsive">
+                        <table id="reports-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="invoice_id">Inv ID</th>
+                                    <th data-i18n="date">Date</th>
+                                    <th data-i18n="customer">Customer</th>
+                                    <th data-i18n="total">Total</th>
+                                    <th data-i18n="payment_mode">Mode</th>
+                                    <th data-i18n="status">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: SETTINGS -->
+            <section id="view-settings" class="view-section">
+                <div class="page-header">
+                    <h2 data-i18n="nav_settings">Settings</h2>
+                </div>
+                <div class="dashboard-layout">
+                    <div class="card">
+                        <div class="card-header"><span data-i18n="app_preferences">Preferences</span></div>
+                        <div style="margin-bottom: 1.25rem;">
+                            <label style="display:block; margin-bottom:0.5rem; font-weight:600;" data-i18n="shop_name_label">Business / Shop Name</label>
+                            <input type="text" id="settings-shop-name" placeholder="E.g., Kirana Store">
+                        </div>
+                        <div style="margin-bottom: 1.25rem;">
+                            <label style="display:block; margin-bottom:0.5rem; font-weight:600;" data-i18n="language">Language</label>
+                            <select id="settings-lang">
+                                <option value="en">English</option>
+                                <option value="hi">हिंदी (Hindi)</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 1.25rem;">
+                            <label style="display:block; margin-bottom:0.5rem; font-weight:600;" data-i18n="theme">Theme Mode</label>
+                            <select id="settings-theme">
+                                <option value="light">Light Mode</option>
+                                <option value="dark">Dark Mode</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><span data-i18n="data_management">Data Administration</span></div>
+                        <p style="margin-bottom: 1.25rem; color: var(--text-muted); font-size:0.9rem;" data-i18n="export_desc">
+                            Download the comprehensive database (including customers, items, and credit reports) directly as a PDF backup.
+                        </p>
+                        <button class="btn btn-primary" id="btn-export-pdf" style="width: 100%; justify-content: center; margin-bottom: 1rem;">
+                            <i class="fas fa-file-pdf"></i> <span data-i18n="export_pdf">Export Ledger (PDF)</span>
+                        </button>
+                        <button class="btn btn-danger" id="btn-clear-data" style="width: 100%; justify-content: center;">
+                            <i class="fas fa-trash"></i> <span data-i18n="clear_data">Factory Reset (Erase All)</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+    
+    <!-- Customer Details & History Modal -->
+    <dialog id="customerHistoryModal">
+        <div class="modal-header">
+            <h3 id="histModalTitle">Customer History</h3>
+            <button onclick="closeModal('customerHistoryModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive" style="max-height: 380px;">
+                <table id="history-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="date">Date</th>
+                            <th data-i18n="desc">Details</th>
+                            <th data-i18n="bill_amount">Bill Amount</th>
+                            <th data-i18n="amount_paid">Paid</th>
+                            <th data-i18n="payment_mode">Mode</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('customerHistoryModal')">Close</button>
+        </div>
+    </dialog>
+
+    <!-- Customer Form Modal -->
+    <dialog id="customerModal">
+        <div class="modal-header">
+            <h3 id="custModalTitle" data-i18n="add_customer">Add Customer</h3>
+            <button onclick="closeModal('customerModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <form id="customerForm">
+                <input type="hidden" id="custId">
+                <label style="font-weight:600;" data-i18n="name">Name</label>
+                <input type="text" id="custName" required>
+                <label style="font-weight:600;" data-i18n="phone">Phone</label>
+                <input type="text" id="custPhone" required>
+                <label style="font-weight:600;" data-i18n="address">Address</label>
+                <input type="text" id="custAddress">
+                <label style="font-weight:600;" data-i18n="pending_start">Opening Balance (Pending)</label>
+                <input type="number" id="custPending" value="0" min="0">
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('customerModal')" data-i18n="cancel">Cancel</button>
+            <button class="btn btn-primary" onclick="saveCustomer()" data-i18n="save">Save</button>
+        </div>
+    </dialog>
+
+    <!-- Inventory Form Modal -->
+    <dialog id="inventoryModal">
+        <div class="modal-header">
+            <h3 id="invModalTitle" data-i18n="add_product">Add Product</h3>
+            <button onclick="closeModal('inventoryModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <form id="inventoryForm">
+                <input type="hidden" id="invId">
+                <label style="font-weight:600;" data-i18n="product_name">Product Name</label>
+                <input type="text" id="invName" required>
+                <label style="font-weight:600;" data-i18n="qty">Quantity</label>
+                <input type="number" id="invQty" required min="0">
+                <div style="display:flex; gap:1rem;">
+                    <div style="flex:1;">
+                        <label style="font-weight:600;" data-i18n="buy_price">Buy Price (₹)</label>
+                        <input type="number" id="invBuy" required min="0" step="0.01">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="font-weight:600;" data-i18n="sell_price">Sell Price (₹)</label>
+                        <input type="number" id="invSell" required min="0" step="0.01">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('inventoryModal')" data-i18n="cancel">Cancel</button>
+            <button class="btn btn-primary" onclick="saveProduct()" data-i18n="save">Save</button>
+        </div>
+    </dialog>
+
+    <!-- Ledger Payment Adjustment Modal -->
+    <dialog id="paymentModal">
+        <div class="modal-header">
+            <h3 data-i18n="add_payment">Add Payment Received</h3>
+            <button onclick="closeModal('paymentModal')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <form id="paymentForm">
+                <input type="hidden" id="payCustId">
+                <p style="margin-bottom: 1.25rem;"><span data-i18n="current_pending">Current Pending Amount: </span> <strong id="payCurrentPending" style="color:var(--danger)">₹0.00</strong></p>
+                <label style="font-weight:600;" data-i18n="amount_received">Amount Received (₹)</label>
+                <input type="number" id="payAmount" required min="1" step="0.01">
+                <label style="font-weight:600;" data-i18n="payment_mode">Payment Mode</label>
+                <select id="payMode">
+                    <option value="Cash">Cash</option>
+                    <option value="UPI">UPI</option>
+                </select>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('paymentModal')" data-i18n="cancel">Cancel</button>
+            <button class="btn btn-primary" onclick="savePayment()" data-i18n="save">Save Payment</button>
+        </div>
+    </dialog>
+
+    <!-- ==================== LOGIC AND STATE ENGINE ==================== -->
+    <script>
+        // State and storage load karne ke liye basic key
+        const DB_KEY = 'hisaab_db_storage';
+        
+        let db = {
+            customers: [],
+            inventory: [],
+            invoices: [],
+            transactions: [],
+            settings: {
+                theme: 'light',
+                lang: 'en',
+                shopName: 'Hisaab Store'
+            }
+        };
+
+        let currentBillItems = [];
+
+        // Loading Data from local storage safely
+        function loadDatabase() {
+            const stored = localStorage.getItem(DB_KEY);
+            if (stored) {
+                try {
+                    db = JSON.parse(stored);
+                    if(!db.settings) {
+                        db.settings = { theme: 'light', lang: 'en', shopName: 'Hisaab Store' };
+                    }
+                    if(!db.settings.shopName) db.settings.shopName = 'Hisaab Store';
+                } catch(e) {
+                    console.error("Data decode error", e);
+                }
+            }
+            applyTheme(db.settings.theme);
+            applyLanguage(db.settings.lang);
+            
+            document.getElementById('settings-shop-name').value = db.settings.shopName;
+            document.getElementById('sidebar-shop-title').innerText = db.settings.shopName;
+        }
+
+        function saveDatabase() {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+        }
+
+        function generateId() {
+            return 'HS-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 5).toUpperCase();
+        }
+
+        /* ==================== TRANSLATIONS (i18n) ==================== */
+        const translations = {
+            en: {
+                app_name: "Hisaab Pro", shop_name_label: "Shop / Business Name",
+                nav_dashboard: "Dashboard", nav_customers: "Customers Ledger", nav_inventory: "Inventory", nav_billing: "Billing Panel", nav_reports: "Invoices & Reports", nav_settings: "Settings",
+                today_sales: "Today's Sales", monthly_profit: "Monthly Profit", pending_amount: "Pending Balance", expenses: "Expenses",
+                sales_overview: "Sales Overview", recent_transactions: "Recent Activities", date: "Date", type: "Type", amount: "Amount",
+                add_customer: "Add Customer", name: "Name", phone: "Phone", address: "Address", pending: "Pending Amount", actions: "Actions", ledger_info: "Click on customer name to view full activity ledger.",
+                add_product: "Add Product", product_name: "Product Name", qty: "Quantity", buy_price: "Buy Price", sell_price: "Sell Price",
+                create_invoice: "Generate Bill", select_customer: "Select Customer (Optional)", select_product: "Select Product",
+                bill_summary: "Bill Summary", subtotal: "Subtotal", discount: "Discount (₹)", total: "Grand Total", amount_paid: "Paid Amount (₹)", payment_mode: "Payment Mode:", cash: "Cash", upi: "UPI", credit: "Credit (Udhaar)", save_print: "Save & Print Bill",
+                all_invoices: "All Invoices", invoice_id: "Invoice ID", customer: "Customer", status: "Status",
+                app_preferences: "Preferences", language: "Language", theme: "Theme Mode", light: "Light Mode", dark: "Dark Mode",
+                data_management: "Data Administration", export_desc: "Download complete business ledger reports directly as a single PDF.", export_pdf: "Export Business Ledger (PDF)", clear_data: "Factory Reset",
+                cancel: "Cancel", save: "Save", search: "Search ledger...", pending_start: "Opening Balance", add_payment: "Add Payment Received", current_pending: "Current Pending Amount: ", amount_received: "Amount Received (₹)",
+                desc: "Details", bill_amount: "Bill Amt"
+            },
+            hi: {
+                app_name: "हिसाब प्रो", shop_name_label: "दुकान / व्यापार का नाम",
+                nav_dashboard: "डैशबोर्ड", nav_customers: "ग्राहक खाता ledger", nav_inventory: "स्टॉक / माल", nav_billing: "बिलिंग पैनल", nav_reports: "इनवॉइस और रिपोर्ट", nav_settings: "सेटिंग्स",
+                today_sales: "आज की बिक्री", monthly_profit: "मासिक मुनाफा", pending_amount: "कुल बकाया उधार", expenses: "खर्च (इन्वेंट्री खरीद)",
+                sales_overview: "बिक्री ग्राफ", recent_transactions: "हाल की गतिविधियां", date: "तारीख", type: "प्रकार", amount: "रकम",
+                add_customer: "नया ग्राहक जोड़ें", name: "नाम", phone: "मोबाइल नंबर", address: "पता", pending: "बकाया उधार", actions: "कार्रवाई", ledger_info: "ग्राहक के नाम पर क्लिक करके उनका पूरा लेनदेन और इतिहास देखें।",
+                add_product: "सामान जोड़ें", product_name: "सामान का नाम", qty: "स्टॉक मात्रा", buy_price: "खरीद रेट", sell_price: "बिक्री रेट",
+                create_invoice: "बिल बनाएं", select_customer: "ग्राहक चुनें (वैकल्पिक)", select_product: "सामान चुनें",
+                bill_summary: "बिल का सारांश", subtotal: "कुल योग", discount: "छूट (₹)", total: "फाइनल बिल", amount_paid: "जमा की गई राशि (₹)", payment_mode: "पेमेंट मोड:", cash: "नकद (Cash)", upi: "UPI", credit: "उधार (Credit)", save_print: "बिल सेव और प्रिंट करें",
+                all_invoices: "सभी जनरेटेड इनवॉइस", invoice_id: "इनवॉइस ID", customer: "ग्राहक", status: "स्थिति",
+                app_preferences: "पसंद", language: "भाषा", theme: "थीम मोड", light: "लाइट थीम", dark: "डार्क थीम",
+                data_management: "डेटा प्रबंधन", export_desc: "अपने सभी ग्राहकों के बहीखाते और स्टॉक लिस्ट को सीधे एक PDF दस्तावेज़ में डाउनलोड करें।", export_pdf: "बहीखाता डाउनलोड करें (PDF)", clear_data: "फैक्ट्री रीसेट (सब मिटाएं)",
+                cancel: "रद्द करें", save: "सुरक्षित करें", search: "सर्च करें...", pending_start: "ओपनिंग उधार", add_payment: "पेमेंट जमा करें", current_pending: "कुल बकाया राशि: ", amount_received: "प्राप्त राशि (₹)",
+                desc: "विवरण", bill_amount: "बिल राशि"
+            }
+        };
+
+        function applyLanguage(lang) {
+            db.settings.lang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.textContent = translations[lang][key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) el.placeholder = translations[lang][key];
+            });
+            document.getElementById('settings-lang').value = lang;
+            saveDatabase();
+        }
+
+        /* ==================== SCREEN NAVIGATION & THEMES ==================== */
+        function applyTheme(theme) {
+            db.settings.theme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            const icon = document.getElementById('themeToggle');
+            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            document.getElementById('settings-theme').value = theme;
+            saveDatabase();
+            if(window.salesChartInstance) renderDashboardChart();
+        }
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+                
+                const target = item.getAttribute('data-target');
+                document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+                document.getElementById('view-' + target).classList.add('active');
+                
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('show');
+                }
+                refreshView(target);
+            });
+        });
+
+        document.getElementById('openSidebar').addEventListener('click', () => document.getElementById('sidebar').classList.add('show'));
+        document.getElementById('closeSidebar').addEventListener('click', () => document.getElementById('sidebar').classList.remove('show'));
+
+        function openModal(id) { document.getElementById(id).showModal(); }
+        function closeModal(id) { 
+            document.getElementById(id).close(); 
+            const form = document.getElementById(id).querySelector('form');
+            if(form) form.reset();
+        }
+
+        function refreshView(view) {
+            if(view === 'dashboard') renderDashboard();
+            if(view === 'customers') renderCustomers();
+            if(view === 'inventory') renderInventory();
+            if(view === 'billing') initBillingView();
+            if(view === 'reports') renderReports();
+        }
+
+        /* ==================== MODULE 1: DASHBOARD CONTROL ==================== */
+        function renderDashboard() {
+            const today = new Date().toISOString().split('T')[0];
+            let todaySales = 0, currentMonthSales = 0, totalExpenses = 0;
+
+            db.invoices.forEach(inv => {
+                const invDate = inv.date.split('T')[0];
+                const isThisMonth = inv.date.startsWith(today.substring(0, 7));
+                if (invDate === today) todaySales += inv.finalTotal;
+                if (isThisMonth) currentMonthSales += inv.finalTotal;
+            });
+
+            // Expense calculation (Including newly added inventory cost)
+            db.transactions.forEach(t => {
+                const isThisMonth = t.date.startsWith(today.substring(0, 7));
+                if (t.type === 'Expense' && isThisMonth) {
+                    totalExpenses += parseFloat(t.amount);
+                }
+            });
+
+            const totalPending = db.customers.reduce((sum, c) => sum + parseFloat(c.pending || 0), 0);
+            const netProfit = currentMonthSales - totalExpenses;
+
+            document.getElementById('dash-today-sales').innerText = `₹${todaySales.toFixed(2)}`;
+            document.getElementById('dash-monthly-profit').innerText = `₹${netProfit.toFixed(2)}`;
+            document.getElementById('dash-pending').innerText = `₹${totalPending.toFixed(2)}`;
+            document.getElementById('dash-expenses').innerText = `₹${totalExpenses.toFixed(2)}`;
+            
+            renderDashboardChart();
+            renderRecentTransactions();
+        }
+
+        function renderRecentTransactions() {
+            const tbody = document.querySelector('#recent-transactions-table tbody');
+            tbody.innerHTML = '';
+            
+            const allActivities = [
+                ...db.invoices.map(i => ({ date: i.date, type: 'Sale', amount: i.finalTotal })),
+                ...db.transactions.map(t => ({ date: t.date, type: t.type, amount: t.amount }))
+            ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 6);
+
+            if(allActivities.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No activity found</td></tr>`;
+                return;
+            }
+
+            allActivities.forEach(act => {
+                let badgeClass = 'badge-warning';
+                if(act.type === 'Sale') badgeClass = 'badge-success';
+                if(act.type === 'Expense') badgeClass = 'badge-danger';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${new Date(act.date).toLocaleDateString()}</td>
+                        <td><span class="badge ${badgeClass}">${act.type}</span></td>
+                        <td>₹${parseFloat(act.amount).toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderDashboardChart() {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            if (window.salesChartInstance) window.salesChartInstance.destroy();
+
+            const labels = [];
+            const datasets = [];
+            for(let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const dateStr = d.toISOString().split('T')[0];
+                labels.push(d.toLocaleDateString('en-US', { weekday: 'short' }));
+                
+                const daySales = db.invoices
+                    .filter(inv => inv.date.startsWith(dateStr))
+                    .reduce((sum, inv) => sum + inv.finalTotal, 0);
+                datasets.push(daySales);
+            }
+
+            const isDark = db.settings.theme === 'dark';
+            const color = isDark ? '#10b981' : '#064E3B';
+
+            window.salesChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Sales (₹)',
+                        data: datasets,
+                        backgroundColor: color,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: isDark ? '#374151' : '#e5e7eb' }, ticks: { color: isDark ? '#9ca3af' : '#6b7280' } },
+                        x: { grid: { display: false }, ticks: { color: isDark ? '#9ca3af' : '#6b7280' } }
+                    }
+                }
+            });
+        }
+
+        /* ==================== MODULE 2: CUSTOMERS LEDGER ==================== */
+        function renderCustomers() {
+            const tbody = document.querySelector('#customers-table tbody');
+            tbody.innerHTML = '';
+            
+            if(db.customers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem;">No customers found. Click Add Customer to start ledger list!</td></tr>`;
+                return;
+            }
+
+            db.customers.forEach(c => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><span class="customer-link" onclick="showCustomerLedgerHistory('${c.id}')">${c.name}</span></td>
+                        <td>${c.phone}</td>
+                        <td>${c.address || '-'}</td>
+                        <td style="color:${c.pending > 0 ? 'var(--danger)' : 'inherit'}; font-weight:700;">₹${parseFloat(c.pending).toFixed(2)}</td>
+                        <td class="action-btns">
+                            <button onclick="openPaymentAdjustment('${c.id}')" title="Quick Payment In"><i class="fas fa-hand-holding-usd" style="color:var(--success)"></i></button>
+                            <button onclick="editCustomer('${c.id}')" title="Edit Profile"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteCustomer('${c.id}')" title="Delete Ledger"><i class="fas fa-trash" style="color:var(--danger)"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function saveCustomer() {
+            const id = document.getElementById('custId').value;
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
+            const pending = parseFloat(document.getElementById('custPending').value) || 0;
+
+            if(!name || !phone) return alert('Name and Phone Number are mandatory!');
+
+            const customerData = {
+                id: id || generateId(),
+                name, phone, address, pending
+            };
+
+            if(id) {
+                const idx = db.customers.findIndex(c => c.id === id);
+                db.customers[idx] = customerData;
+            } else {
+                db.customers.push(customerData);
+            }
+
+            saveDatabase();
+            closeModal('customerModal');
+            renderCustomers();
+        }
+
+        function editCustomer(id) {
+            const c = db.customers.find(x => x.id === id);
+            document.getElementById('custId').value = c.id;
+            document.getElementById('custName').value = c.name;
+            document.getElementById('custPhone').value = c.phone;
+            document.getElementById('custAddress').value = c.address;
+            document.getElementById('custPending').value = c.pending;
+            document.getElementById('custModalTitle').innerText = db.settings.lang === 'en' ? 'Edit Customer' : 'ग्राहक विवरण बदलें';
+            openModal('customerModal');
+        }
+
+        function deleteCustomer(id) {
+            const msg = db.settings.lang === 'en' ? 'Are you sure you want to delete this customer?' : 'क्या आप इस ग्राहक को हटाना चाहते हैं?';
+            if(confirm(msg)) {
+                db.customers = db.customers.filter(c => c.id !== id);
+                saveDatabase();
+                renderCustomers();
+            }
+        }
+
+        /* ==================== MODULE 3: DETAILED LEDGER/HISTORY VIEW ==================== */
+        function showCustomerLedgerHistory(customerId) {
+            const customer = db.customers.find(c => c.id === customerId);
+            if(!customer) return;
+
+            document.getElementById('histModalTitle').innerText = `${customer.name} - Ledger Activity`;
+
+            const tbody = document.querySelector('#history-table tbody');
+            tbody.innerHTML = '';
+
+            // Filter invoices of this customer
+            const customerInvoices = db.invoices.filter(inv => inv.customerId === customerId).map(inv => ({
+                date: inv.date,
+                details: inv.items.map(it => `${it.name} (x${it.qty})`).join(', '),
+                billAmt: inv.finalTotal,
+                paid: inv.paid,
+                mode: inv.paymentMode,
+                type: 'Purchase'
+            }));
+
+            // Filter manual payments
+            const customerPayments = db.transactions.filter(t => t.customerId === customerId).map(t => ({
+                date: t.date,
+                details: t.type === 'Payment In' ? 'Payment Received' : 'Balance Adjustments',
+                billAmt: 0,
+                paid: t.amount,
+                mode: t.mode || 'Cash',
+                type: 'Direct Payment'
+            }));
+
+            const ledgerTimeline = [...customerInvoices, ...customerPayments].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            if(ledgerTimeline.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem;">No logs found for this customer.</td></tr>`;
+            } else {
+                ledgerTimeline.forEach(log => {
+                    const isPurchase = log.type === 'Purchase';
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${new Date(log.date).toLocaleDateString()}</td>
+                            <td style="font-size:0.85rem; font-weight:600;">${log.details}</td>
+                            <td style="color:${isPurchase ? 'var(--danger)' : 'var(--text-muted)'}">${isPurchase ? '₹' + log.billAmt.toFixed(2) : '-'}</td>
+                            <td style="color:var(--success); font-weight:bold;">₹${log.paid.toFixed(2)}</td>
+                            <td><span class="badge badge-success">${log.mode}</span></td>
+                        </tr>
+                    `;
+                });
+            }
+
+            openModal('customerHistoryModal');
+        }
+
+        /* Direct payments ledger adjustment */
+        function openPaymentAdjustment(id) {
+            const c = db.customers.find(x => x.id === id);
+            document.getElementById('payCustId').value = c.id;
+            document.getElementById('payCurrentPending').innerText = `₹${c.pending.toFixed(2)}`;
+            document.getElementById('payAmount').value = '';
+            openModal('paymentModal');
+        }
+
+        function savePayment() {
+            const customerId = document.getElementById('payCustId').value;
+            const amount = parseFloat(document.getElementById('payAmount').value);
+            const mode = document.getElementById('payMode').value;
+
+            if(!amount || amount <= 0) return alert('Invalid Amount!');
+
+            const customer = db.customers.find(c => c.id === customerId);
+            customer.pending -= amount;
+
+            db.transactions.push({
+                id: generateId(),
+                date: new Date().toISOString(),
+                type: 'Payment In',
+                amount: amount,
+                mode: mode,
+                customerId: customerId
+            });
+
+            saveDatabase();
+            closeModal('paymentModal');
+            renderCustomers();
+        }
+
+        /* ==================== MODULE 4: INVENTORY CONTROL ==================== */
+        function renderInventory() {
+            const tbody = document.querySelector('#inventory-table tbody');
+            tbody.innerHTML = '';
+            
+            if(db.inventory.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2.5rem;">No inventory added yet. Click Add Product to update catalog!</td></tr>`;
+                return;
+            }
+
+            db.inventory.forEach(p => {
+                const isLow = p.qty <= 5;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${p.name}</strong></td>
+                        <td><span class="badge ${isLow ? 'badge-danger' : 'badge-success'}">${p.qty} items</span></td>
+                        <td>₹${parseFloat(p.buyPrice).toFixed(2)}</td>
+                        <td>₹${parseFloat(p.sellPrice).toFixed(2)}</td>
+                        <td class="action-btns">
+                            <button onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteProduct('${p.id}')"><i class="fas fa-trash" style="color:var(--danger)"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function saveProduct() {
+            const id = document.getElementById('invId').value;
+            const name = document.getElementById('invName').value.trim();
+            const qty = parseInt(document.getElementById('invQty').value) || 0;
+            const buyPrice = parseFloat(document.getElementById('invBuy').value) || 0;
+            const sellPrice = parseFloat(document.getElementById('invSell').value) || 0;
+
+            if(!name) return alert('Product name is required!');
+
+            let previousQty = 0;
+            if(id) {
+                const oldProd = db.inventory.find(p => p.id === id);
+                if(oldProd) previousQty = oldProd.qty;
+            }
+
+            const incomingStock = qty - previousQty;
+
+            // Log stock incoming as Expense
+            if (incomingStock > 0) {
+                const calculatedExpense = incomingStock * buyPrice;
+                db.transactions.push({
+                    id: generateId(),
+                    date: new Date().toISOString(),
+                    type: 'Expense',
+                    amount: calculatedExpense,
+                    desc: `Stock added: ${name} (+${incomingStock})`
+                });
+            }
+
+            const itemDetails = { id: id || generateId(), name, qty, buyPrice, sellPrice };
+
+            if(id) {
+                const idx = db.inventory.findIndex(p => p.id === id);
+                db.inventory[idx] = itemDetails;
+            } else {
+                db.inventory.push(itemDetails);
+            }
+
+            saveDatabase();
+            closeModal('inventoryModal');
+            renderInventory();
+        }
+
+        function editProduct(id) {
+            const p = db.inventory.find(x => x.id === id);
+            document.getElementById('invId').value = p.id;
+            document.getElementById('invName').value = p.name;
+            document.getElementById('invQty').value = p.qty;
+            document.getElementById('invBuy').value = p.buyPrice;
+            document.getElementById('invSell').value = p.sellPrice;
+            document.getElementById('invModalTitle').innerText = db.settings.lang === 'en' ? 'Edit Product' : 'सामान का विवरण बदलें';
+            openModal('inventoryModal');
+        }
+
+        function deleteProduct(id) {
+            if(confirm('Delete product from stock?')) {
+                db.inventory = db.inventory.filter(p => p.id !== id);
+                saveDatabase();
+                renderInventory();
+            }
+        }
+
+        /* ==================== MODULE 5: BILLING ENGINE ==================== */
+        function initBillingView() {
+            currentBillItems = [];
+            document.getElementById('bill-discount').value = 0;
+            document.getElementById('bill-paid').value = 0;
+            document.getElementById('bill-payment-mode').value = 'Cash';
+
+            const custSelect = document.getElementById('bill-customer-select');
+            custSelect.innerHTML = `<option value="">Select Customer (Optional)</option>`;
+            db.customers.forEach(c => {
+                custSelect.innerHTML += `<option value="${c.id}">${c.name} (${c.phone})</option>`;
+            });
+
+            const prodSelect = document.getElementById('bill-product-select');
+            prodSelect.innerHTML = `<option value="">Select Product</option>`;
+            db.inventory.filter(p => p.qty > 0).forEach(p => {
+                prodSelect.innerHTML += `<option value="${p.id}" data-price="${p.sellPrice}" data-max="${p.qty}">${p.name} (Qty: ${p.qty})</option>`;
+            });
+
+            updateBillingUI();
+        }
+
+        document.getElementById('bill-product-select').addEventListener('change', (e) => {
+            const selected = e.target.options[e.target.selectedIndex];
+            if(selected.value) {
+                document.getElementById('bill-price').value = selected.getAttribute('data-price');
+                document.getElementById('bill-qty').max = selected.getAttribute('data-max');
+            } else {
+                document.getElementById('bill-price').value = '';
+            }
+        });
+
+        document.getElementById('btn-add-bill-item').addEventListener('click', () => {
+            const selectEl = document.getElementById('bill-product-select');
+            const productId = selectEl.value;
+            if(!productId) return;
+
+            const name = selectEl.options[selectEl.selectedIndex].text.split(' (')[0];
+            const price = parseFloat(document.getElementById('bill-price').value);
+            const qty = parseInt(document.getElementById('bill-qty').value);
+            const maxVal = parseInt(selectEl.options[selectEl.selectedIndex].getAttribute('data-max'));
+
+            if(qty > maxVal) return alert(`Limit exceeded. Only ${maxVal} units available!`);
+
+            const existing = currentBillItems.find(item => item.productId === productId);
+            if(existing) {
+                if(existing.qty + qty > maxVal) return alert('Limit exceeded in checkout list!');
+                existing.qty += qty;
+                existing.total = existing.qty * existing.price;
+            } else {
+                currentBillItems.push({ productId, name, price, qty, total: price * qty });
+            }
+
+            updateBillingUI(true);
+        });
+
+        function updateBillingUI(triggerAutoFill = false) {
+            const container = document.getElementById('bill-items-container');
+            container.innerHTML = '';
+            let subtotal = 0;
+
+            currentBillItems.forEach((item, idx) => {
+                subtotal += item.total;
+                container.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 0; border-bottom:1px solid var(--border-color);">
+                        <div style="flex:2"><strong>${item.name}</strong></div>
+                        <div style="flex:1">${item.qty} x ₹${item.price.toFixed(2)}</div>
+                        <div style="flex:1; text-align:right; font-weight:600;">₹${item.total.toFixed(2)}</div>
+                        <button onclick="removeBillItem(${idx})" style="color:var(--danger); padding:0 0.5rem;"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `;
+            });
+
+            const discount = parseFloat(document.getElementById('bill-discount').value) || 0;
+            const grandTotal = subtotal - discount;
+
+            document.getElementById('bill-subtotal').innerText = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('bill-grand-total').innerText = `₹${grandTotal.toFixed(2)}`;
+
+            if(triggerAutoFill && document.getElementById('bill-payment-mode').value !== 'Credit') {
+                document.getElementById('bill-paid').value = grandTotal;
+            }
+        }
+
+        function removeBillItem(idx) {
+            currentBillItems.splice(idx, 1);
+            updateBillingUI(true);
+        }
+
+        document.getElementById('bill-discount').addEventListener('input', () => updateBillingUI(true));
+        
+        document.getElementById('bill-payment-mode').addEventListener('change', (e) => {
+            if(e.target.value === 'Credit') {
+                document.getElementById('bill-paid').value = 0;
+            } else {
+                updateBillingUI(true);
+            }
+        });
+
+        document.getElementById('btn-save-bill').addEventListener('click', () => {
+            if(currentBillItems.length === 0) return alert('Cart is empty!');
+
+            const customerId = document.getElementById('bill-customer-select').value;
+            const subtotal = currentBillItems.reduce((sum, item) => sum + item.total, 0);
+            const discount = parseFloat(document.getElementById('bill-discount').value) || 0;
+            const grandTotal = subtotal - discount;
+            let paid = parseFloat(document.getElementById('bill-paid').value) || 0;
+            const paymentMode = document.getElementById('bill-payment-mode').value;
+
+            if(paid > grandTotal) paid = grandTotal;
+
+            const remainingDue = grandTotal - paid;
+            let status = 'Paid';
+
+            if(remainingDue > 0 || paymentMode === 'Credit') {
+                if(!customerId) return alert('Customer selection is required to issue credit (udhaar) or partial dues!');
+                status = 'Credit';
+                const customer = db.customers.find(c => c.id === customerId);
+                customer.pending += remainingDue;
+            }
+
+            // Reduce stock
+            currentBillItems.forEach(item => {
+                const stockItem = db.inventory.find(p => p.id === item.productId);
+                if(stockItem) stockItem.qty -= item.qty;
+            });
+
+            const invoice = {
+                id: 'INV-' + Math.floor(100000 + Math.random() * 900000),
+                date: new Date().toISOString(),
+                customerId,
+                items: currentBillItems,
+                subtotal,
+                discount,
+                finalTotal: grandTotal,
+                paid,
+                paymentMode,
+                status
+            };
+
+            db.invoices.push(invoice);
+            saveDatabase();
+            triggerPrintInvoice(invoice);
+            initBillingView();
+        });
+
+        function triggerPrintInvoice(invoice) {
+            let customerInfo = 'Cash / Walk-in';
+            if(invoice.customerId) {
+                const match = db.customers.find(c => c.id === invoice.customerId);
+                if(match) customerInfo = `${match.name} (${match.phone})`;
+            }
+
+            let productsListHtml = '';
+            invoice.items.forEach(it => {
+                productsListHtml += `
+                    <tr>
+                        <td style="padding:6px; border-bottom:1px solid #ddd;">${it.name}</td>
+                        <td style="padding:6px; border-bottom:1px solid #ddd; text-align:center;">${it.qty}</td>
+                        <td style="padding:6px; border-bottom:1px solid #ddd; text-align:right;">₹${it.price.toFixed(2)}</td>
+                        <td style="padding:6px; border-bottom:1px solid #ddd; text-align:right;">₹${it.total.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+
+            const renderTemplate = `
+                <div style="text-align:center; padding: 1.5rem 0; border-bottom: 2px dashed #000;">
+                    <h2 style="margin:0; font-size:1.6rem; text-transform:uppercase;">${db.settings.shopName}</h2>
+                    <p style="margin: 4px 0;">Invoice ID: ${invoice.id}</p>
+                    <p style="margin: 4px 0;">Date: ${new Date(invoice.date).toLocaleString()}</p>
+                </div>
+                <div style="margin: 1.25rem 0;">
+                    <p><strong>Billed To:</strong> ${customerInfo}</p>
+                </div>
+                <table style="width:100%; border-collapse:collapse; margin-bottom: 1.5rem;">
+                    <thead>
+                        <tr style="background-color:#eee;">
+                            <th style="padding:6px; text-align:left; border-bottom:1px solid #000;">Product</th>
+                            <th style="padding:6px; border-bottom:1px solid #000;">Qty</th>
+                            <th style="padding:6px; text-align:right; border-bottom:1px solid #000;">Rate</th>
+                            <th style="padding:6px; text-align:right; border-bottom:1px solid #000;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${productsListHtml}
+                    </tbody>
+                </table>
+                <div style="text-align:right; line-height:1.6; font-size: 1.1rem;">
+                    <p>Subtotal: ₹${invoice.subtotal.toFixed(2)}</p>
+                    <p>Discount: ₹${invoice.discount.toFixed(2)}</p>
+                    <h3 style="margin-top:0.4rem; color: #000;">Final Amount: ₹${invoice.finalTotal.toFixed(2)}</h3>
+                    <p>Paid (${invoice.paymentMode}): ₹${invoice.paid.toFixed(2)}</p>
+                    ${(invoice.finalTotal - invoice.paid > 0) ? `<p style="font-weight:700;">Remaining Balance: ₹${(invoice.finalTotal - invoice.paid).toFixed(2)}</p>` : ''}
+                </div>
+                <div style="text-align:center; margin-top:2.5rem; border-top: 1px dashed #000; padding-top:1rem;">
+                    <p>Thank you! Visit again.</p>
+                </div>
+            `;
+
+            const printContainer = document.getElementById('print-area');
+            printContainer.innerHTML = renderTemplate;
+            window.print();
+        }
+
+        /* ==================== MODULE 6: REPORTS & ALL INVOICES ==================== */
+        function renderReports() {
+            const tbody = document.querySelector('#reports-table tbody');
+            tbody.innerHTML = '';
+
+            if(db.invoices.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 2rem;">No invoices generated yet.</td></tr>`;
+                return;
+            }
+
+            [...db.invoices].reverse().forEach(inv => {
+                let customerName = 'Cash / Walk-in';
+                if(inv.customerId) {
+                    const c = db.customers.find(item => item.id === inv.customerId);
+                    if(c) customerName = c.name;
+                }
+
+                const badge = inv.status === 'Paid' ? 'badge-success' : 'badge-danger';
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${inv.id}</strong></td>
+                        <td>${new Date(inv.date).toLocaleDateString()}</td>
+                        <td>${customerName}</td>
+                        <td>₹${inv.finalTotal.toFixed(2)}</td>
+                        <td><span class="badge badge-warning">${inv.paymentMode}</span></td>
+                        <td><span class="badge ${badge}">${inv.status}</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        /* ==================== GLOBAL SETTINGS & DATA CONTROLS ==================== */
+        document.getElementById('settings-shop-name').addEventListener('input', (e) => {
+            db.settings.shopName = e.target.value.trim() || 'Hisaab Store';
+            document.getElementById('sidebar-shop-title').innerText = db.settings.shopName;
+            saveDatabase();
+        });
+
+        document.getElementById('settings-lang').addEventListener('change', (e) => applyLanguage(e.target.value));
+        document.getElementById('langToggle').addEventListener('click', () => {
+            const nextLang = db.settings.lang === 'en' ? 'hi' : 'en';
+            applyLanguage(nextLang);
+        });
+
+        document.getElementById('settings-theme').addEventListener('change', (e) => applyTheme(e.target.value));
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const nextTheme = db.settings.theme === 'light' ? 'dark' : 'light';
+            applyTheme(nextTheme);
+        });
+
+        // PDF EXPORT LEDGER SYSTEM
+        document.getElementById('btn-export-pdf').addEventListener('click', () => {
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                doc.setFontSize(20);
+                doc.setTextColor(6, 78, 59);
+                doc.text(db.settings.shopName, 14, 18);
+                
+                doc.setFontSize(10);
+                doc.setTextColor(100, 100, 100);
+                doc.text(`Official Business Ledger - Generated on: ${new Date().toLocaleString()}`, 14, 25);
+
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text("Customer Ledger Balance Report", 14, 38);
+
+                const tableBody = db.customers.map(c => [
+                    c.name,
+                    c.phone,
+                    c.address || '-',
+                    `Rs. ${parseFloat(c.pending).toFixed(2)}`
+                ]);
+
+                doc.autoTable({
+                    startY: 42,
+                    head: [['Name', 'Phone No', 'Address', 'Pending Dues']],
+                    body: tableBody,
+                    theme: 'grid',
+                    headStyles: { fillColor: [6, 78, 59] }
+                });
+
+                let inventoryY = doc.lastAutoTable.finalY + 15;
+                doc.text("Stock Inventory Balance Report", 14, inventoryY);
+
+                const inventoryTableData = db.inventory.map(p => [
+                    p.name,
+                    `${p.qty} items`,
+                    `Rs. ${parseFloat(p.buyPrice).toFixed(2)}`,
+                    `Rs. ${parseFloat(p.sellPrice).toFixed(2)}`
+                ]);
+
+                doc.autoTable({
+                    startY: inventoryY + 4,
+                    head: [['Product Name', 'Remaining Stock', 'Buy Unit Price', 'Sell Unit Price']],
+                    body: inventoryTableData,
+                    theme: 'grid',
+                    headStyles: { fillColor: [6, 78, 59] }
+                });
+
+                doc.save(`${db.settings.shopName.replace(/\s+/g, '_')}_Ledger_Backup.pdf`);
+                alert("Your PDF business ledger has been exported successfully!");
+            } catch (err) {
+                alert("PDF export error occurred! Make sure your internet connection is enabled to load CDN components.");
+                console.error(err);
+            }
+        });
+
+        document.getElementById('btn-clear-data').addEventListener('click', () => {
+            const warning = db.settings.lang === 'en' ? 'Warning: Are you absolutely sure you want to clear all data? This cannot be undone.' : 'चेतावनी: क्या आप निश्चित रूप से सारा डेटा डिलीट करना चाहते हैं?';
+            if(confirm(warning)) {
+                localStorage.removeItem(DB_KEY);
+                location.reload();
+            }
+        });
+
+        // Search Ledger Logic
+        document.getElementById('globalSearch').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const activeSection = document.querySelector('.view-section.active').id;
+
+            if (activeSection === 'view-customers') {
+                document.querySelectorAll('#customers-table tbody tr').forEach(row => {
+                    row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none';
+                });
+            } else if (activeSection === 'view-inventory') {
+                document.querySelectorAll('#inventory-table tbody tr').forEach(row => {
+                    row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none';
+                });
+            } else if (activeSection === 'view-reports') {
+                document.querySelectorAll('#reports-table tbody tr').forEach(row => {
+                    row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none';
+                });
+            }
+        });
+
+        // Init App Lifecycle
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDatabase();
+            renderDashboard();
+        });
+    </script>
+</body>
+</html>
+
+```
